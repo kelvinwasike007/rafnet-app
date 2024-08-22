@@ -17,3 +17,17 @@ Route::prefix('services')->group(function ()  {
     Volt::route('/edit', 'pages.services.edit')->name('services.edit');
     Volt::route('/inventory', 'pages.services.inventory')->name('services.inventory');
 })->name('services');
+
+Route::prefix('accounts')->group(function ()  {
+    Volt::route('/', 'pages.accounts.index')->name('accounts.index');
+    Volt::route('/role', 'pages.roles.index')->name('accounts.role');
+    Volt::route('/role/edit', 'pages.roles.edit')->name('accounts.role.edit');
+    Volt::route('/permission', 'pages.permissions.index')->name('accounts.permission');
+    Volt::route('/add', 'pages.accounts.add')->name('accounts.add');
+    Volt::route('/edit', 'pages.accounts.edit')->name('accounts.edit');
+    Volt::route('/inventory', 'pages.accounts.inventory')->name('accounts.inventory');
+})->name('accounts');
+
+Route::prefix('orders')->group(function ()  {
+    Volt::route('/', 'pages.orders.index')->name('orders.index');
+})->name('accounts');

@@ -18,7 +18,7 @@ $logout = function (Logout $logout) {
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" wire:navigate>
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                        <div class="text-gray-900">RAFNET</div>
                     </a>
                 </div>
 
@@ -32,6 +32,9 @@ $logout = function (Logout $logout) {
                     </x-nav-link>
                     <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.index' , 'services.add')" wire:navigate>
                         {{ __('Services') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('accounts.index')" :active="request()->routeIs('accounts.index' , 'accounts.add')" wire:navigate>
+                        {{ __('Accounts') }}
                     </x-nav-link>
                 </div>
             </div>

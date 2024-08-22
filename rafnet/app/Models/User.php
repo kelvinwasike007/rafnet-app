@@ -7,10 +7,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Orders;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles;
+    public function orders()
+    {
+        return $this->hasMany(Orders::class);
+    }
 
     /**
      * The attributes that are mass assignable.
