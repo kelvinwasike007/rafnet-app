@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">rafnet</string>
+    <string name="title_activity_main">rafnet</string>
+    <string name="package_name">com.rafnet.app</string>
+    <string name="custom_url_scheme">com.rafnet.app</string>
+</resources>
