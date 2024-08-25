@@ -6,25 +6,12 @@ on:
 
 jobs:
   build:
-    name: Build and Upload Android APK
+    name: Build and Upload Signed APK
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-
-    - name: Install dependencies
-      run: npm install
-      working-directory: mobile
-
-    - name: Build Next.js assets
-      run: npm run build
-      working-directory: mobile
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4
@@ -39,6 +26,19 @@ jobs:
         api-level: 30
         build-tools: 30.0.3
 
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: npm install
+      working-directory: mobile
+
+    - name: Build Next.js assets
+      run: npm run build
+      working-directory: mobile
+
     - name: Sync Capacitor with Android
       run: npx cap sync android
       working-directory: mobile
@@ -47,8 +47,17 @@ jobs:
       working-directory: mobile/android
       run: chmod +x gradlew
 
+    - name: Decode and Setup Keystore
+      run: |
+        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > mobile/android/my-release-key.jks
+      shell: bash
+
     - name: Build with Gradle
       working-directory: mobile/android
+      env:
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: ./gradlew assembleRelease
 
     - name: Upload APK
