@@ -47,18 +47,18 @@ jobs:
       working-directory: mobile/android
       run: chmod +x gradlew
 
-    - name: Decode and Setup Keystore
+    - name: Generate Keystore
       run: |
-        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > mobile/android/my-release-key.jks
+        keytool -genkey -v -keystore mobile/android/app/my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-key-alias -storepass password -keypass password -dname "CN=Example, OU=Example, O=Example, L=Example, ST=Example, C=US"
       shell: bash
 
     - name: Build with Gradle
       working-directory: mobile/android
-      env:
-        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: ./gradlew assembleRelease
+      env:
+        KEYSTORE_PASSWORD: "password"
+        KEY_ALIAS: "my-key-alias"
+        KEY_PASSWORD: "password"
 
     - name: Upload APK
       uses: actions/upload-artifact@v3
