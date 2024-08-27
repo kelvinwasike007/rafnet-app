@@ -8,7 +8,7 @@ class ServiceController extends Controller
 {
     public function index()
     {
-        $services = Services::paginate();
+        $services = Services::all();
         return response()->json($services);
     }
 }

@@ -20,13 +20,14 @@ class OrderController extends Controller
             'orderable_id' => 'required|integer',
             'orderable_type' => 'required|string',
             'quantity' => 'required|integer|min:1',
+            'price'=> 'required'
         ]);
 
         $order = $request->user()->orders()->create([
             'orderable_id' => $request->orderable_id,
             'orderable_type' => $request->orderable_type,
             'quantity' => $request->quantity,
-            'total_price' => $request->quantity * $request->orderable()->price, // Assumes you have price on the orderable models
+            'total_price' => $request->quantity, // Assumes you have price on the orderable models
         ]);
 
         return response()->json($order, 201);
