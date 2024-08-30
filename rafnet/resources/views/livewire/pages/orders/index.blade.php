@@ -6,30 +6,30 @@ use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use App\Models\User;
+use App\Models\Orders;
 new 
 #[Layout('layouts.app')]
 class extends Component{
 
     use WithPagination;
 
-    public $role;
+    public function changeStat($order) {
+        $id = $order["id"];
+        $res = Orders::find($id);
+        if($res->status == 'pending'){
+            $res->status = 'purchased';
+            $res->save();
+            Log::info($res->status);
+        }else {
+            $res->status ='pending';
+            $res->save();
+            Log::alert($res);
+        }
+    }
+    
 
     public function with() {
-        return ['roles' =>  Role::paginate(10)];
-    }
-
-    public function delete($id)  {
-        User::where('id',$id)->delete();
-        return redirect()->route('accounts.index');
-    }
-
-    public function edit($id)  {
-        return redirect()->route('accounts.role.edit', ['id' => $id]);
-    }
-
-    public function addRole()  {
-        Role::create(['name'=> $this->role]);
-        return redirect()->route('accounts.role');
+        return ['orders' =>  Orders::paginate(10)];
     }
 }
 
@@ -51,26 +51,25 @@ class extends Component{
         </div>
         <table class="table table-stripped">
             <thead>
-                <th>Role</th>
-                <th>Permissions</th>
-                <th>OPERATIONS</th>
+                <th>ORDER ID</th>
+                <th>PRODUCT</th>
+                <th>Quantity</th>
+                <th>PRICE</th>
+                <th>STATUS</th>
             </thead>
             <tbody>
-                @foreach ($roles as $role)
+                @foreach ($orders as $order)
                     <tr>
-                        <td>{{ $role->name}}</td>
-                        <td>@foreach ($role->permissions as $item)
-                            {{$item->name}}
-                        @endforeach</td>
-                        <td class="flex space-x-2">
-                            <button wire:click="delete({{$role->id}})"  wire:confirm="Are you sure you want to delete this post?" class="btn btn-error btn-xs">DELETE</button>
-                            <button wire:click="edit({{$role->id}})" class="btn btn-info btn-xs" wire:navigate>EDIT</button>
-                        </td>
+                        <td>{{$order->id}}</td>
+                        <td>{{User::find($order->user_id)->orders()->with('orderable')->find($order->id)->orderable->name}}</td>
+                        <td>{{$order->quantity}}</td>
+                        <td>{{$order->total_price}}</td>
+                        <td><button wire:click="changeStat({{$order}})" class="text-bold btn btn-sm">{{$order->status}}</button></td>
                     </tr>
                 @endforeach
             </tbody>
             <tfoot>
-                <td>{{ $roles->links() }}</td>
+                <td>{{ $orders->links() }}</td>
             </tfoot>
         </table>
     </div>

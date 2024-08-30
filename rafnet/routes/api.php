@@ -21,4 +21,5 @@ Route::middleware('auth:api')->group(function () {
     Route::get('services', [ServiceController::class, 'index']);
     Route::get('orders', [OrderController::class, 'index']);
     Route::post('orders', [OrderController::class, 'store']);
+    Route::delete('orders', [OrderController::class, 'delete']);
 });

@@ -36,6 +36,9 @@ $logout = function (Logout $logout) {
                     <x-nav-link :href="route('accounts.index')" :active="request()->routeIs('accounts.index' , 'accounts.add')" wire:navigate>
                         {{ __('Accounts') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.index' , 'orders.add')" wire:navigate>
+                        {{ __('Orders') }}
+                    </x-nav-link>
                 </div>
             </div>
 
